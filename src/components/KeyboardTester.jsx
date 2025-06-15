@@ -511,8 +511,8 @@ const KeyboardTester = () => {
           </div>
         </div>
 
-        {/* Statistics and History - Only shown in Pro mode */}
-        {currentMode.showStats && currentMode.showHistory && (
+        {/* Statistics and History - Only shown in Pro mode after starting test */}
+        {currentMode.showStats && currentMode.showHistory && (startTime || keyHistory.length > 0) && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Key Statistics */}
             <div className="bg-slate-800 rounded-xl p-6 shadow-2xl">
