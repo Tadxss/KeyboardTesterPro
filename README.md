@@ -16,26 +16,37 @@ A professional keyboard testing and analysis tool built with React and Vite.
 1. Install dependencies:
    ```bash
    npm install
+   ```
 
 2. Start development server:
-bashnpm run dev
+   ```bash
+   npm run dev
+   ```
 
 3. Build for production:
-bashnpm run build
+   ```bash
+   npm run build
+   ```
 
-Preview production build:
-bashnpm run preview
+4. Preview production build:
+   ```bash
+   npm run preview
+   ```
 
+## Technologies Used
 
-Technologies Used
+- React 18
+- Vite
+- Tailwind CSS
+- Lucide React (icons)
 
-React 18
-Vite
-Tailwind CSS
-Lucide React (icons)
+## Usage
 
-Usage
+1. Click "Start Test" to begin recording keystrokes
+2. Press any keys on your keyboard
+3. Watch the virtual keyboard light up in real-time
+4. View statistics and export results when finished
 
-Click "Start Test" to begin recording keystrokes
-Press any keys on your keyboard
-Watch the virtual keyboard light up in real
+## License
+
+MIT License
