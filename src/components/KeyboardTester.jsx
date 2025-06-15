@@ -20,26 +20,6 @@ const KeyboardTester = () => {
   const intervalRef = useRef(null);
 
   // Test mode configurations
-//   const testModes = {
-//     basic: {
-//       name: 'Basic',
-//       description: 'Simple keyboard testing - just visual feedback',
-//       showStats: false,
-//       showHistory: false,
-//       showExport: false,
-//       showAdvancedMetrics: false
-//     },
-//     pro: {
-//       name: 'Professional',
-//       description: 'Complete testing suite with statistics and analysis',
-//       showStats: true,
-//       showHistory: true,
-//       showExport: true,
-//       showAdvancedMetrics: true
-//     }
-//   };
-
-  // Test mode configurations
   const testModes = useMemo(() => ({
     basic: {
         name: 'Basic',
@@ -680,7 +660,7 @@ const KeyboardTester = () => {
                 Professional keyboard testing tool with real-time analytics and cross-platform support
               </div>
               <div className="text-slate-500 text-xs">
-                Version 2.0 • Optimized for {navigator.platform.includes('Mac') ? 'macOS' : 'Windows/Linux'}
+                Version 1.0 • Optimized for {navigator.platform.includes('Mac') ? 'macOS' : 'Windows/Linux'}
               </div>
             </div>
           </div>
