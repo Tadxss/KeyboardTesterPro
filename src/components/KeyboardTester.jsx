@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Play, Pause, RotateCcw, Download, Settings, Keyboard, Timer, Target, Zap, ChevronDown, Code, Heart } from 'lucide-react';
+import BuyMeACoffee from './BuyMeACoffee';
 
 const KeyboardTester = () => {
   const [pressedKeys, setPressedKeys] = useState(new Set());
@@ -718,6 +719,8 @@ const KeyboardTester = () => {
               </div>
             </div>
           </div>
+
+          <BuyMeACoffee />
         </div>
       </div>
 
