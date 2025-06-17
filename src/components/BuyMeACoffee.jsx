@@ -1,5 +1,3 @@
-import { Heart } from 'lucide-react';
-
 export default function BuyMeACoffee() {
     return (
         <div className="mt-8 bg-slate-800 rounded-xl p-6 shadow-2xl relative overflow-hidden">

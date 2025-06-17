@@ -68,7 +68,7 @@ const KeyboardTester = () => {
     ]
   };
 
-  const specialKeys = {
+  const specialKeys = useMemo(() => ({
     ' ': 'Space',
     'Control': 'Ctrl',
     'Meta': navigator.platform.includes('Mac') ? 'Cmd' : 'Win',
@@ -115,7 +115,7 @@ const KeyboardTester = () => {
     'AudioVolumeUp': '🔊',
     'AudioVolumeDown': '🔉',
     'AudioVolumeMute': '🔇'
-  };
+  }), []);
 
   const getKeyDisplay = (key) => specialKeys[key] || key;
 
