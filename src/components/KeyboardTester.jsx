@@ -11,6 +11,7 @@ const KeyboardTester = () => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [keyStats, setKeyStats] = useState({});
   const [showModeDropdown, setShowModeDropdown] = useState(false);
+  const [showNumpad, setShowNumpad] = useState(false);
   const [settings, setSettings] = useState({
     showKeyCode: true,
     showTimestamp: true,
@@ -56,6 +57,13 @@ const KeyboardTester = () => {
       ],
       ['ArrowUp'],
       ['ArrowLeft', 'ArrowDown', 'ArrowRight']
+    ],
+    numpad: [
+      ['NumLock', '/', '*', '-'],
+      ['7', '8', '9', '+'],
+      ['4', '5', '6'],
+      ['1', '2', '3', 'Enter'],
+      ['0', '.']
     ]
   };
 
@@ -90,6 +98,15 @@ const KeyboardTester = () => {
     'F5': 'F5', 'F6': 'F6', 'F7': 'F7', 'F8': 'F8',
     'F9': 'F9', 'F10': 'F10', 'F11': 'F11', 'F12': 'F12',
     'NumLock': 'NumLk',
+    'NumpadDivide': '/',
+    'NumpadMultiply': '*',
+    'NumpadSubtract': '-',
+    'NumpadAdd': '+',
+    'NumpadEnter': 'Enter',
+    'NumpadDecimal': '.',
+    'Numpad0': '0', 'Numpad1': '1', 'Numpad2': '2', 'Numpad3': '3',
+    'Numpad4': '4', 'Numpad5': '5', 'Numpad6': '6', 'Numpad7': '7',
+    'Numpad8': '8', 'Numpad9': '9',
     'MediaPlayPause': '⏯',
     'MediaStop': '⏹',
     'MediaTrackNext': '⏭',
@@ -139,6 +156,12 @@ const KeyboardTester = () => {
       displayKey = 'Space';
     }
 
+    if (code.startsWith('Numpad')) {
+      normalizedKey = code.replace('Numpad', '');
+      displayKey = specialKeys[code] || normalizedKey;
+      setShowNumpad(true);
+    }
+
     // Prevent default behavior to avoid unwanted actions (like scrolling with spacebar)
     // Only allow default behavior for certain keys that need it
     const allowDefaultKeys = ['F5', 'F11', 'F12']; // Keys that should keep their default behavior
@@ -185,10 +208,11 @@ const KeyboardTester = () => {
         });
       }, settings.highlightDuration);
     }
-  }, [pressedKeys, isRecording, settings.highlightDuration, testMode, testModes]);
+  }, [pressedKeys, isRecording, settings.highlightDuration, testMode, testModes, specialKeys]);
 
   const handleKeyUp = useCallback((event) => {
     const key = event.key;
+    const code = event.code;
     
     // Handle platform-specific key mapping for key up events
     let normalizedKey = key;
@@ -212,6 +236,11 @@ const KeyboardTester = () => {
     // Special handling for Space key
     if (key === ' ') {
       normalizedKey = 'Space';
+    }
+
+    // Handle numpad keys
+    if (code.startsWith('Numpad')) {
+      normalizedKey = code.replace('Numpad', '');
     }
 
     // Remove from pressed keys on key up for modifier keys and space
@@ -341,6 +370,30 @@ const KeyboardTester = () => {
       keyVariants.push(key, getKeyDisplay(key));
     }
     
+    // Special handling for Numpad keys
+    if (key === 'NumpadDivide' || key === '/') {
+      keyVariants.push('NumpadDivide', '/');
+    }
+    if (key === 'NumpadMultiply' || key === '*') {
+      keyVariants.push('NumpadMultiply', '*');
+    }
+    if (key === 'NumpadSubtract' || key === '-') {
+      keyVariants.push('NumpadSubtract', '-');
+    }
+    if (key === 'NumpadAdd' || key === '+') {
+      keyVariants.push('NumpadAdd', '+');
+    }
+    if (key === 'NumpadEnter' || key === 'Enter') {
+      keyVariants.push('NumpadEnter', 'Enter');
+    }
+    if (key === 'NumpadDecimal' || key === '.') {
+      keyVariants.push('NumpadDecimal', '.');
+    }
+    if (key.match(/^Numpad[0-9]$/)) {
+      const num = key.replace('Numpad', '');
+      keyVariants.push(`Numpad${num}`, num);
+    }
+    
     // Check if any variant is currently pressed
     isPressed = keyVariants.some(variant => 
       pressedKeys.has(variant) || 
@@ -374,6 +427,13 @@ const KeyboardTester = () => {
       case 'ArrowDown':
       case 'ArrowLeft':
       case 'ArrowRight': return 'w-12';
+      case 'NumLock':
+      case 'NumpadDivide':
+      case 'NumpadMultiply':
+      case 'NumpadSubtract': return 'w-12';
+      case 'NumpadAdd':
+      case 'NumpadEnter': return 'w-12 h-24';
+      case '0': return showNumpad ? 'w-24' : 'w-12';
       default: return 'w-12';
     }
   };
@@ -465,6 +525,16 @@ const KeyboardTester = () => {
                     Export
                   </button>
                 )}
+
+                <button
+                  onClick={() => setShowNumpad(!showNumpad)}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                    showNumpad ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'bg-slate-700 hover:bg-slate-600 text-slate-200'
+                  }`}
+                >
+                  <Keyboard className="w-5 h-5" />
+                  {showNumpad ? 'Hide Numpad' : 'Show Numpad'}
+                </button>
               </div>
 
               {/* Metrics - only shown in Pro mode */}
@@ -491,23 +561,62 @@ const KeyboardTester = () => {
 
           {/* Virtual Keyboard */}
           <div className="bg-slate-800 rounded-xl p-8 mb-8 shadow-2xl">
-            <h2 className="text-2xl font-semibold text-emerald-400 mb-6 text-center">Virtual Keyboard</h2>
-            <div className="flex flex-col items-center gap-2 font-mono">
-              {keyboardLayouts.qwerty.map((row, rowIndex) => (
-                <div key={rowIndex} className={`flex gap-1 ${rowIndex >= 5 ? 'justify-center' : ''}`}>
-                  {row.map((key, keyIndex) => (
-                    <div
-                      key={`${rowIndex}-${keyIndex}`}
-                      className={`${getKeyClassName(key)} ${getKeyWidth(key)} h-12 ${
-                        rowIndex === 5 ? 'mt-4' : rowIndex === 6 ? 'mt-1' : ''
-                      }`}
-                    >
-                      {getKeyDisplay(key)}
-                    </div>
-                  ))}
+            <h2 className="text-2xl font-semibold text-emerald-400 mb-6 text-center">
+              Virtual Keyboard
+            </h2>
+            
+            {/* Show either main keyboard or numpad, not both */}
+            {!showNumpad ? (
+              /* Main Keyboard */
+              <div className="flex flex-col items-center gap-2 font-mono mb-8">
+                {keyboardLayouts.qwerty.map((row, rowIndex) => (
+                  <div key={rowIndex} className={`flex gap-1 ${rowIndex >= 5 ? 'justify-center' : ''}`}>
+                    {row.map((key, keyIndex) => (
+                      <div
+                        key={`${rowIndex}-${keyIndex}`}
+                        className={`${getKeyClassName(key)} ${getKeyWidth(key)} h-12 ${
+                          rowIndex === 5 ? 'mt-4' : rowIndex === 6 ? 'mt-1' : ''
+                        }`}
+                      >
+                        {getKeyDisplay(key)}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex justify-center">
+                <div className="grid grid-cols-4 gap-2 font-mono w-fit">
+                  {/* First row */}
+                  <div className={`${getKeyClassName('NumLock')} w-12 h-12`}>NumLk</div>
+                  <div className={`${getKeyClassName('/')} w-12 h-12`}>/</div>
+                  <div className={`${getKeyClassName('*')} w-12 h-12`}>*</div>
+                  <div className={`${getKeyClassName('-')} w-12 h-12`}>-</div>
+                  
+                  {/* Second row */}
+                  <div className={`${getKeyClassName('7')} w-12 h-12`}>7</div>
+                  <div className={`${getKeyClassName('8')} w-12 h-12`}>8</div>
+                  <div className={`${getKeyClassName('9')} w-12 h-12`}>9</div>
+                  <div className={`${getKeyClassName('+')} w-12 h-26 row-span-2`}>+</div>
+                  
+                  {/* Third row */}
+                  <div className={`${getKeyClassName('4')} w-12 h-12`}>4</div>
+                  <div className={`${getKeyClassName('5')} w-12 h-12`}>5</div>
+                  <div className={`${getKeyClassName('6')} w-12 h-12`}>6</div>
+                  
+                  {/* Fourth row */}
+                  <div className={`${getKeyClassName('1')} w-12 h-12`}>1</div>
+                  <div className={`${getKeyClassName('2')} w-12 h-12`}>2</div>
+                  <div className={`${getKeyClassName('3')} w-12 h-12`}>3</div>
+                  <div className={`${getKeyClassName('Enter')} w-12 h-26 row-span-2`}>⏎</div>
+                  
+                  {/* Fifth row */}
+                  <div className={`${getKeyClassName('0')} w-26 col-span-2 mr-0 h-12`}>0</div>
+                  <div className={`${getKeyClassName('.')} w-12 h-12`}>.</div>
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
+
             <div className="text-center mt-4 text-slate-400 text-sm">
               {testMode === 'basic' ? 'Press any key to see it light up!' : 'Arrow keys are positioned separately for better visibility'}
             </div>
@@ -581,6 +690,7 @@ const KeyboardTester = () => {
                   <li>• Watch the virtual keyboard light up</li>
                   {currentMode.showStats && <li>• Monitor your typing statistics</li>}
                   {currentMode.showExport && <li>• Export results when finished</li>}
+                  <li>• Toggle numpad visibility as needed</li>
                 </ul>
               </div>
               <div>
@@ -591,6 +701,7 @@ const KeyboardTester = () => {
                   <li>• Cross-platform key detection</li>
                   <li>• {navigator.platform.includes('Mac') ? '⌘ Cmd' : '🪟 Win'} key support</li>
                   <li>• All modifier and function keys</li>
+                  <li>• Full numpad support</li>
                 </ul>
               </div>
               <div>
@@ -601,6 +712,7 @@ const KeyboardTester = () => {
                   {currentMode.showStats && <li>• Detailed statistics and history</li>}
                   {currentMode.showExport && <li>• Export test results (JSON)</li>}
                   <li>• Mac & Windows keyboard layouts</li>
+                  <li>• Full numpad testing support</li>
                   <li>• No page scrolling during tests</li>
                 </ul>
               </div>
