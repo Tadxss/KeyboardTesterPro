@@ -750,6 +750,9 @@ const KeyboardTester = () => {
                 <span className="bg-cyan-600 text-white px-3 py-1 rounded-full text-sm font-medium">Tailwind CSS</span>
                 <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium">Lucide Icons</span>
                 <span className="bg-orange-600 text-white px-3 py-1 rounded-full text-sm font-medium">HTML5</span>
+                <span className="bg-yellow-600 text-white px-3 py-1 rounded-full text-sm font-medium">Vite</span>
+                <span className="bg-teal-600 text-white px-3 py-1 rounded-full text-sm font-medium">Netlify</span>
+                <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium">Google Analytics</span>
               </div>
             </div>
 
