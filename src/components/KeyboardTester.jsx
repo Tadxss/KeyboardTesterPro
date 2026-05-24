@@ -122,6 +122,11 @@ const KeyboardTester = () => {
   const getKeyDisplay = (key) => specialKeys[key] || key;
 
   const handleKeyDown = useCallback((event) => {
+    // Don't intercept when modal is open or user is typing in an input
+    if (showContact) return;
+    const tag = document.activeElement?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
     const key = event.key;
     const code = event.code;
     const timestamp = Date.now();
@@ -211,9 +216,14 @@ const KeyboardTester = () => {
         });
       }, settings.highlightDuration);
     }
-  }, [pressedKeys, isRecording, settings.highlightDuration, testMode, testModes, specialKeys]);
+  }, [pressedKeys, isRecording, settings.highlightDuration, testMode, testModes, specialKeys, showContact]);
 
   const handleKeyUp = useCallback((event) => {
+    // Don't intercept when modal is open or user is typing in an input
+    if (showContact) return;
+    const tag = document.activeElement?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
     const key = event.key;
     const code = event.code;
     
@@ -252,7 +262,7 @@ const KeyboardTester = () => {
       newSet.delete(normalizedKey);
       return newSet;
     });
-  }, []);
+  }, [showContact]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
