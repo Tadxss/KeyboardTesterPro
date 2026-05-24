@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { Play, Pause, RotateCcw, Download, Settings, Keyboard, Timer, Target, Zap, ChevronDown, Code, Heart } from 'lucide-react';
+import { Play, Pause, RotateCcw, Download, Settings, Keyboard, Timer, Target, Zap, ChevronDown, Code, Heart, Mail } from 'lucide-react';
 import BuyMeACoffee from './BuyMeACoffee';
+import ContactModal from './ContactModal';
 
 const KeyboardTester = () => {
   const [pressedKeys, setPressedKeys] = useState(new Set());
@@ -13,6 +14,7 @@ const KeyboardTester = () => {
   const [keyStats, setKeyStats] = useState({});
   const [showModeDropdown, setShowModeDropdown] = useState(false);
   const [showNumpad, setShowNumpad] = useState(false);
+  const [showContact, setShowContact] = useState(false);
   const [settings, setSettings] = useState({
     showKeyCode: true,
     showTimestamp: true,
@@ -442,35 +444,36 @@ const KeyboardTester = () => {
   const currentMode = testModes[testMode];
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col">
-      <div className="flex-1 p-6">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-emerald-400 mb-2 flex items-center justify-center gap-3">
-              <Keyboard className="w-10 h-10" />
-              Keyboard Tester {currentMode.name}
-            </h1>
-            <p className="text-slate-400 text-lg">
-              {currentMode.description}
-            </p>
-            <div className="mt-2 text-sm text-slate-500">
-              Platform: {navigator.platform.includes('Mac') ? 'macOS' : 'Windows/Linux'} | 
-              Optimized for {navigator.platform.includes('Mac') ? 'Mac' : 'PC'} keyboards
+    <div className="min-h-screen bg-slate-900 text-slate-100">
+      {/* Sticky Header */}
+      <header className="bg-slate-950 border-b border-slate-800 sticky top-0 z-10">
+        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Keyboard className="w-7 h-7 text-emerald-400" />
+            <div className="text-left">
+              <h1 className="text-xl font-bold text-white leading-tight">Keyboard Tester Pro</h1>
+              <p className="text-xs text-slate-400">{currentMode.description}</p>
             </div>
           </div>
+          <div className="text-xs text-slate-500">
+            {navigator.platform.includes('Mac') ? 'macOS' : 'Windows/Linux'} · {navigator.platform.includes('Mac') ? 'Mac' : 'PC'} layout
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-5xl mx-auto px-6 py-5 space-y-4">
 
           {/* Control Panel */}
-          <div className="bg-slate-800 rounded-xl p-6 mb-8 shadow-2xl">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
+          <div className="bg-slate-800 rounded-xl p-4 shadow-2xl">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
                 {/* Test Mode Selector */}
                 <div className="relative">
                   <button
                     onClick={() => setShowModeDropdown(!showModeDropdown)}
-                    className="flex items-center gap-2 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg font-semibold transition-all"
+                    className="flex items-center gap-2 px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg font-semibold transition-all text-sm"
                   >
-                    <Settings className="w-5 h-5" />
+                    <Settings className="w-4 h-4" />
                     {currentMode.name} Mode
                     <ChevronDown className="w-4 h-4" />
                   </button>
@@ -498,21 +501,21 @@ const KeyboardTester = () => {
 
                 <button
                   onClick={isRecording ? stopRecording : startRecording}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all text-sm ${
                     isRecording 
                       ? 'bg-red-600 hover:bg-red-700 text-white' 
                       : 'bg-emerald-600 hover:bg-emerald-700 text-white'
                   }`}
                 >
-                  {isRecording ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+                  {isRecording ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                   {isRecording ? 'Stop Test' : 'Start Test'}
                 </button>
                 
                 <button
                   onClick={resetTest}
-                  className="flex items-center gap-2 px-6 py-3 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg font-semibold transition-all"
+                  className="flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg font-semibold transition-all text-sm"
                 >
-                  <RotateCcw className="w-5 h-5" />
+                  <RotateCcw className="w-4 h-4" />
                   Reset
                 </button>
 
@@ -520,38 +523,38 @@ const KeyboardTester = () => {
                   <button
                     onClick={exportResults}
                     disabled={keyHistory.length === 0}
-                    className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-700 disabled:text-slate-500 text-white rounded-lg font-semibold transition-all"
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-700 disabled:text-slate-500 text-white rounded-lg font-semibold transition-all text-sm"
                   >
-                    <Download className="w-5 h-5" />
+                    <Download className="w-4 h-4" />
                     Export
                   </button>
                 )}
 
                 <button
                   onClick={() => setShowNumpad(!showNumpad)}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all text-sm ${
                     showNumpad ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'bg-slate-700 hover:bg-slate-600 text-slate-200'
                   }`}
                 >
-                  <Keyboard className="w-5 h-5" />
+                  <Keyboard className="w-4 h-4" />
                   {showNumpad ? 'Hide Numpad' : 'Show Numpad'}
                 </button>
               </div>
 
               {/* Metrics - only shown in Pro mode */}
               {currentMode.showAdvancedMetrics && (
-                <div className="flex items-center gap-6 text-slate-300">
-                  <div className="flex items-center gap-2">
-                    <Timer className="w-5 h-5 text-emerald-400" />
-                    <span className="font-mono text-lg">{formatTime(elapsedTime)}</span>
+                <div className="flex items-center gap-4 text-slate-300">
+                  <div className="flex items-center gap-1.5">
+                    <Timer className="w-4 h-4 text-emerald-400" />
+                    <span className="font-mono text-sm">{formatTime(elapsedTime)}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Target className="w-5 h-5 text-blue-400" />
-                    <span className="font-mono text-lg">{keyHistory.length} keys</span>
+                  <div className="flex items-center gap-1.5">
+                    <Target className="w-4 h-4 text-blue-400" />
+                    <span className="font-mono text-sm">{keyHistory.length} keys</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-yellow-400" />
-                    <span className="font-mono text-lg">
+                  <div className="flex items-center gap-1.5">
+                    <Zap className="w-4 h-4 text-yellow-400" />
+                    <span className="font-mono text-sm">
                       {elapsedTime > 0 ? Math.round((keyHistory.length / elapsedTime) * 60000) : 0} KPM
                     </span>
                   </div>
@@ -561,15 +564,15 @@ const KeyboardTester = () => {
           </div>
 
           {/* Virtual Keyboard */}
-          <div className="bg-slate-800 rounded-xl p-8 mb-8 shadow-2xl">
-            <h2 className="text-2xl font-semibold text-emerald-400 mb-6 text-center">
+          <div className="bg-slate-800 rounded-xl p-5 shadow-2xl">
+            <h2 className="text-base font-semibold text-emerald-400 mb-3 text-center">
               Virtual Keyboard
             </h2>
             
             {/* Show either main keyboard or numpad, not both */}
             {!showNumpad ? (
               /* Main Keyboard */
-              <div className="flex flex-col items-center gap-2 font-mono mb-8">
+              <div className="flex flex-col items-center gap-1.5 font-mono mb-3">
                 {keyboardLayouts.qwerty.map((row, rowIndex) => (
                   <div key={rowIndex} className={`flex gap-1 ${rowIndex >= 5 ? 'justify-center' : ''}`}>
                     {row.map((key, keyIndex) => (
@@ -679,9 +682,9 @@ const KeyboardTester = () => {
           )}
 
           {/* Instructions */}
-          <div className="mt-8 bg-slate-800 rounded-xl p-6 shadow-2xl">
-            <h3 className="text-xl font-semibold text-emerald-400 mb-4">Instructions</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-slate-300">
+          <div className="bg-slate-800 rounded-xl p-5 shadow-2xl">          
+            <h3 className="text-base font-semibold text-emerald-400 mb-3">Instructions</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-slate-300">
               <div>
                 <h4 className="font-semibold text-slate-200 mb-2">How to Test:</h4>
                 <ul className="space-y-1 text-sm">
@@ -720,13 +723,29 @@ const KeyboardTester = () => {
             </div>
           </div>
 
+          {/* Collab CTA */}
+          <div className="rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-900/30 to-pink-900/20 px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 mt-4">
+            <div>
+              <p className="text-white font-semibold text-base">👋 Got an idea or need a developer?</p>
+              <p className="text-slate-400 text-sm mt-0.5">I'm open to freelance work, collaborations, and full-time opportunities.</p>
+            </div>
+            <button
+              onClick={() => setShowContact(true)}
+              className="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-sm shadow-lg shadow-purple-900/40 transition-all"
+            >
+              <Mail className="w-4 h-4" />
+              Get in Touch
+            </button>
+          </div>
+
           <BuyMeACoffee />
-        </div>
-      </div>
+        </main>
+
+      <ContactModal isOpen={showContact} onClose={() => setShowContact(false)} />
 
       {/* Footer */}
-      <footer className="bg-slate-950 border-t border-slate-800 mt-12">
-        <div className="max-w-7xl mx-auto px-6 py-8">
+      <footer className="bg-slate-950 border-t border-slate-800 mt-8">
+        <div className="max-w-5xl mx-auto px-6 py-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Developer Info */}
             <div className="text-center md:text-left">
@@ -734,7 +753,7 @@ const KeyboardTester = () => {
                 <Code className="w-5 h-5 text-emerald-400" />
                 <span className="text-lg font-semibold text-slate-200">Developed by</span>
               </div>
-              <p className="text-xl font-bold text-emerald-400 mb-2">Daryl John Tadeo</p>
+              <a href="https://daryltadeo.netlify.app" target="_blank" rel="noopener noreferrer" className="text-xl font-bold text-emerald-400 mb-2 hover:text-emerald-300 transition-colors inline-block">Daryl John Tadeo</a>
               <p className="text-slate-400 text-sm">Full Stack Developer & UI/UX Enthusiast</p>
             </div>
 
