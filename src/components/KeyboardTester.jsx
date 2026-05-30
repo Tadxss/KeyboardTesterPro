@@ -461,7 +461,7 @@ const KeyboardTester = () => {
           <div className="flex items-center gap-3">
             <Keyboard className="w-7 h-7 text-emerald-400" />
             <div className="text-left">
-              <h1 className="text-xl font-bold text-white leading-tight">Keyboard Tester Pro</h1>
+              <h1 className="text-xl font-bold text-white leading-tight">Free Keyboard Tester</h1>
               <p className="text-xs text-slate-400">{currentMode.description}</p>
             </div>
           </div>
