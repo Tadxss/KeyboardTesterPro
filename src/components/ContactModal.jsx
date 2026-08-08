@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Send, Check, Loader, Mail, User, MessageSquare } from 'lucide-react';
+import { submitContactForm } from '../lib/contact';
 
 export default function ContactModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -8,7 +9,9 @@ export default function ContactModal({ isOpen, onClose }) {
   // Close on Escape key
   useEffect(() => {
     if (!isOpen) return;
-    const handler = (e) => { if (e.key === 'Escape') onClose(); };
+    const handler = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, [isOpen, onClose]);
@@ -16,30 +19,21 @@ export default function ContactModal({ isOpen, onClose }) {
   // Lock body scroll when open
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen]);
 
   const handleChange = (e) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormStatus('sending');
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          access_key: '9d2f6699-80d4-4345-bbe9-b78ece5a9513',
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
-          subject: `Keyboard Tester Pro — Message from ${formData.name}`,
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
+      const success = await submitContactForm(formData);
+      if (success) {
         setFormStatus('success');
         setFormData({ name: '', email: '', message: '' });
       } else {
@@ -58,17 +52,14 @@ export default function ContactModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      onClick={handleClose}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={handleClose}>
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
       {/* Modal */}
       <div
         className="relative w-full max-w-md bg-slate-800 rounded-2xl border border-slate-700 shadow-2xl"
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-700">
@@ -92,7 +83,9 @@ export default function ContactModal({ isOpen, onClose }) {
                 <Check className="w-7 h-7 text-emerald-400" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Message Sent!</h3>
-              <p className="text-slate-400 text-sm">Thanks for reaching out. I'll get back to you soon.</p>
+              <p className="text-slate-400 text-sm">
+                Thanks for reaching out. I'll get back to you soon.
+              </p>
               <button
                 onClick={handleClose}
                 className="mt-6 px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium transition-all"
@@ -104,7 +97,8 @@ export default function ContactModal({ isOpen, onClose }) {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-1.5">
-                  <User className="w-3.5 h-3.5 inline mr-1.5" />Name
+                  <User className="w-3.5 h-3.5 inline mr-1.5" />
+                  Name
                 </label>
                 <input
                   type="text"
@@ -118,7 +112,8 @@ export default function ContactModal({ isOpen, onClose }) {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-1.5">
-                  <Mail className="w-3.5 h-3.5 inline mr-1.5" />Email
+                  <Mail className="w-3.5 h-3.5 inline mr-1.5" />
+                  Email
                 </label>
                 <input
                   type="email"
@@ -132,7 +127,8 @@ export default function ContactModal({ isOpen, onClose }) {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-1.5">
-                  <MessageSquare className="w-3.5 h-3.5 inline mr-1.5" />Message
+                  <MessageSquare className="w-3.5 h-3.5 inline mr-1.5" />
+                  Message
                 </label>
                 <textarea
                   name="message"
@@ -155,9 +151,13 @@ export default function ContactModal({ isOpen, onClose }) {
                 className="w-full flex items-center justify-center gap-2 py-2.5 bg-purple-600 hover:bg-purple-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all"
               >
                 {formStatus === 'sending' ? (
-                  <><Loader className="w-4 h-4 animate-spin" /> Sending...</>
+                  <>
+                    <Loader className="w-4 h-4 animate-spin" /> Sending...
+                  </>
                 ) : (
-                  <><Send className="w-4 h-4" /> Send Message</>
+                  <>
+                    <Send className="w-4 h-4" /> Send Message
+                  </>
                 )}
               </button>
             </form>

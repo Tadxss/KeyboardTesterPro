@@ -1,52 +1,59 @@
-# Keyboard Tester Pro
+# Free Keyboard Tester
 
-A professional keyboard testing and analysis tool built with React and Vite.
+A professional, 100% client-side keyboard testing and analysis tool — press keys, watch the virtual
+keyboard light up, and (in Professional mode) track statistics, history, and export results.
 
-## Features
+## ✨ Features
+- ⚡ Real-time key detection and visualization
+- 🖥️ Cross-platform support (Mac, Windows, Linux) with correct modifier-key labels
+- ⌨️ Virtual keyboard with visual feedback, plus a toggleable numpad
+- 📊 Key statistics and history tracking (Professional mode)
+- 📥 Export test results as JSON
+- 🚫 No page scrolling during tests
 
-- Real-time key detection and visualization
-- Cross-platform support (Mac, Windows, Linux)
-- Virtual keyboard with visual feedback
-- Key statistics and history tracking
-- Export test results
-- No page scrolling during tests
+## 🛠️ Tech Stack
+| Category       | Technologies                 |
+|----------------|------------------------------|
+| Frontend       | React 19, JavaScript (ES6+)  |
+| Build Tool     | Vite                         |
+| Styling        | Tailwind CSS                 |
+| Icons          | Lucide React                 |
+| Testing        | Vitest, React Testing Library |
+| Deployment     | Netlify                      |
 
-## Getting Started
+## 🚀 Quick Start
+### Prerequisites
+- Node.js ≥20
+- npm
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
+### Installation
+```bash
+git clone https://github.com/Tadxss/KeyboardTesterPro.git
+cd KeyboardTesterPro
+npm install
+cp .env.example .env   # fill in VITE_WEB3FORMS_ACCESS_KEY
+npm run dev
+```
 
-2. Start development server:
-   ```bash
-   npm run dev
-   ```
+### Scripts
+```bash
+npm run dev            # start the dev server
+npm run build           # production build → dist/
+npm run preview          # preview the production build locally
+npm run lint               # ESLint
+npm run check-types         # TypeScript check (tsc --noEmit)
+npm run format                # Prettier --write
+npm run format:check           # Prettier --check
+npm test                        # run the Vitest suite
+```
 
-3. Build for production:
-   ```bash
-   npm run build
-   ```
-
-4. Preview production build:
-   ```bash
-   npm run preview
-   ```
-
-## Technologies Used
-
-- React 18
-- Vite
-- Tailwind CSS
-- Lucide React (icons)
-
-## Usage
-
-1. Click "Start Test" to begin recording keystrokes
+### Usage
+1. Click "Start Test" to begin recording keystrokes (Professional mode)
 2. Press any keys on your keyboard
-3. Watch the virtual keyboard light up in real-time
+3. Watch the virtual keyboard light up in real time
 4. View statistics and export results when finished
 
-## License
+See `CLAUDE.md` for the full project structure and conventions.
 
+## License
 MIT License
