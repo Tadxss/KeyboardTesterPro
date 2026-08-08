@@ -62,7 +62,7 @@ if (tag === 'INPUT' || tag === 'TEXTAREA') return;
 
 ## Shared Identity
 
-- Footer "Daryl John Tadeo" links to `https://daryltadeo.netlify.app/`
+- Footer "Daryl John Tadeo" links to `https://daryljohntadeo.space/`
 - Buy Me a Coffee copy: `"Found this useful? Support the work —"`
 - GA4 ID: `G-P1898N6HT7`
 

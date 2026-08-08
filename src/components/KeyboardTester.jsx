@@ -763,7 +763,7 @@ const KeyboardTester = () => {
                 <Code className="w-5 h-5 text-emerald-400" />
                 <span className="text-lg font-semibold text-slate-200">Developed by</span>
               </div>
-              <a href="https://daryltadeo.netlify.app" target="_blank" rel="noopener noreferrer" className="text-xl font-bold text-emerald-400 mb-2 hover:text-emerald-300 transition-colors inline-block">Daryl John Tadeo</a>
+              <a href="https://daryljohntadeo.space" target="_blank" rel="noopener noreferrer" className="text-xl font-bold text-emerald-400 mb-2 hover:text-emerald-300 transition-colors inline-block">Daryl John Tadeo</a>
               <p className="text-slate-400 text-sm">Full Stack Developer & UI/UX Enthusiast</p>
             </div>
 
