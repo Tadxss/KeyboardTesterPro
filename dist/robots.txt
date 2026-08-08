@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://keyboardtesterpro.netlify.app/sitemap.xml
